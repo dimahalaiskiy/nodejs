@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js Architecture Schematic</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        
+        .title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .architecture-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .layer {
+            border: 2px solid #34495e;
+            border-radius: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .layer:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .layer-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+            background: #3498db;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin: -20px -20px 15px -20px;
+        }
+        
+        .components {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .component {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 120px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .component:hover {
+            background: #3498db;
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .event-loop {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+        
+        .event-loop .layer-title {
+            background: #e74c3c;
+        }
+        
+        .javascript {
+            background: linear-gradient(135deg, #f7b731 0%, #f39c12 100%);
+        }
+        
+        .javascript .layer-title {
+            background: #f39c12;
+        }
+        
+        .nodejs-apis {
+            background: linear-gradient(135deg, #5f27cd 0%, #341f97 100%);
+        }
+        
+        .nodejs-apis .layer-title {
+            background: #5f27cd;
+        }
+        
+        .c-addons {
+            background: linear-gradient(135deg, #00d2d3 0%, #54a0ff 100%);
+        }
+        
+        .c-addons .layer-title {
+            background: #00d2d3;
+        }
+        
+        .libuv {
+            background: linear-gradient(135deg, #2ed573 0%, #7bed9f 100%);
+        }
+        
+        .libuv .layer-title {
+            background: #2ed573;
+        }
+        
+        .os {
+            background: linear-gradient(135deg, #70a1ff 0%, #5352ed 100%);
+        }
+        
+        .os .layer-title {
+            background: #5352ed;
+        }
+        
+        .flow-arrow {
+            text-align: center;
+            font-size: 2em;
+            color: #3498db;
+            margin: 10px 0;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .description {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .description h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        
+        .description p {
+            line-height: 1.6;
+            color: #34495e;
+        }
+        
+        .event-loop-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .phase {
+            background: white;
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .phase-number {
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Node.js Architecture Overview</div>
+        
+        <div class="architecture-container">
+            <!-- JavaScript Application Layer -->
+            <div class="layer javascript">
+                <div class="layer-title">JavaScript Application Layer</div>
+                <div class="components">
+                    <div class="component">Your Code</div>
+                    <div class="component">Third-party Modules</div>
+                    <div class="component">Express.js</div>
+                    <div class="component">React/Vue</div>
+                    <div class="component">Database Drivers</div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">↓</div>
+            
+            <!-- Node.js Core APIs -->
+            <div class="layer nodejs-apis">
+                <div class="layer-title">Node.js Core APIs</div>
+                <div class="components">
+                    <div class="component">HTTP</div>
+                    <div class="component">File System</div>
+                    <div class="component">Crypto</div>
+                    <div class="component">Events</div>
+                    <div class="component">Streams</div>
+                    <div class="component">Buffer</div>
+                    <div class="component">Path</div>
+                    <div class="component">OS</div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">↓</div>
+            
+            <!-- Event Loop -->
+            <div class="layer event-loop">
+                <div class="layer-title">Event Loop (Main Thread - Single Threaded JavaScript)</div>
+                
+                <!-- Clean Event Loop Flow Diagram -->
+                <div class="event-loop-flow" style="background: white; padding: 20px; border-radius: 15px; margin: 20px 0;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <!-- Phase boxes with arrows -->
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="background: linear-gradient(135deg, #ff6b6b, #ee5a24); color: white; padding: 15px 20px; border-radius: 10px; text-align: center; min-width: 120px; box-shadow: 0 4px 15px rgba(238,90,36,0.3);">
+                                <div style="font-weight: bold; font-size: 1.1em;">Timer</div>
+                                <div style="font-size: 0.8em; opacity: 0.9;">setTimeout<br>setInterval</div>
+                            </div>
+                            <div style="font-size: 2em; color: #e74c3c;">→</div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="background: linear-gradient(135deg, #a29bfe, #6c5ce7); color: white; padding: 15px 20px; border-radius: 10px; text-align: center; min-width: 120px; box-shadow: 0 4px 15px rgba(108,92,231,0.3);">
+                                <div style="font-weight: bold; font-size: 1.1em;">Pending</div>
+                                <div style="font-size: 0.8em; opacity: 0.9;">I/O callbacks<br>from prev cycle</div>
+                            </div>
+                            <div style="font-size: 2em; color: #e74c3c;">→</div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="background: linear-gradient(135deg, #00cec9, #00b894); color: white; padding: 15px 20px; border-radius: 10px; text-align: center; min-width: 120px; box-shadow: 0 4px 15px rgba(0,184,148,0.3);">
+                                <div style="font-weight: bold; font-size: 1.1em;">Poll</div>
+                                <div style="font-size: 0.8em; opacity: 0.9;">Fetch I/O events<br>Execute callbacks</div>
+                            </div>
+                            <div style="font-size: 2em; color: #e74c3c;">→</div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="background: linear-gradient(135deg, #fdcb6e, #e17055); color: white; padding: 15px 20px; border-radius: 10px; text-align: center; min-width: 120px; box-shadow: 0 4px 15px rgba(225,112,85,0.3);">
+                                <div style="font-weight: bold; font-size: 1.1em;">Check</div>
+                                <div style="font-size: 0.8em; opacity: 0.9;">setImmediate<br>callbacks</div>
+                            </div>
+                            <div style="font-size: 2em; color: #e74c3c;">→</div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="background: linear-gradient(135deg, #74b9ff, #0984e3); color: white; padding: 15px 20px; border-radius: 10px; text-align: center; min-width: 120px; box-shadow: 0 4px 15px rgba(9,132,227,0.3);">
+                                <div style="font-weight: bold; font-size: 1.1em;">Close</div>
+                                <div style="font-size: 0.8em; opacity: 0.9;">Close callbacks<br>socket.on('close')</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Loop back arrow -->
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div style="font-size: 1.5em; color: #e74c3c; margin-bottom: 5px;">↻</div>
+                        <div style="color: #e74c3c; font-weight: bold;">Loops Continuously</div>
+                    </div>
+                </div>
+                
+                <!-- Detailed Phase Information -->
+                <div class="event-loop-details">
+                    <div class="phase">
+                        <div class="phase-number">1</div>
+                        <div>Timer Phase</div>
+                        <small>setTimeout, setInterval</small>
+                    </div>
+                    <div class="phase">
+                        <div class="phase-number">2</div>
+                        <div>Pending Callbacks</div>
+                        <small>I/O callbacks</small>
+                    </div>
+                    <div class="phase">
+                        <div class="phase-number">3</div>
+                        <div>Poll Phase</div>
+                        <small>Fetch new I/O events</small>
+                    </div>
+                    <div class="phase">
+                        <div class="phase-number">4</div>
+                        <div>Check Phase</div>
+                        <small>setImmediate callbacks</small>
+                    </div>
+                    <div class="phase">
+                        <div class="phase-number">5</div>
+                        <div>Close Callbacks</div>
+                        <small>socket.on('close')</small>
+                    </div>
+                </div>
+                
+                <!-- Process.nextTick and Promises -->
+                <div style="margin-top: 20px; background: rgba(255,255,255,0.95); padding: 15px; border-radius: 10px; border: 2px solid #f39c12;">
+                    <h4 style="color: #e67e22; margin: 0 0 10px 0;">🚀 Microtask Queue (Higher Priority)</h4>
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <div style="background: #f39c12; color: white; padding: 8px 12px; border-radius: 20px; font-size: 0.9em;">process.nextTick()</div>
+                        <div style="background: #e67e22; color: white; padding: 8px 12px; border-radius: 20px; font-size: 0.9em;">Promise.then()</div>
+                        <div style="background: #d35400; color: white; padding: 8px 12px; border-radius: 20px; font-size: 0.9em;">queueMicrotask()</div>
+                    </div>
+                    <p style="margin: 10px 0 0 0; font-size: 0.85em; color: #d35400;"><strong>Executes between each phase!</strong> These always run before the next phase begins.</p>
+                </div>
+                
+                <div style="margin-top: 15px; background: rgba(255,255,255,0.9); padding: 15px; border-radius: 10px; border: 2px dashed #e74c3c;">
+                    <strong style="color: #e74c3c;">⚠️ IMPORTANT:</strong> JavaScript execution is single-threaded, but heavy operations are delegated to worker threads!
+                </div>
+            </div>
+            
+            <div class="flow-arrow">↓</div>
+            
+            <!-- C++ Addons & Bindings -->
+            <div class="layer c-addons">
+                <div class="layer-title">C++ Addons & Bindings</div>
+                <div class="components">
+                    <div class="component">V8 Engine</div>
+                    <div class="component">Node.js C++ Core</div>
+                    <div class="component">Native Modules</div>
+                    <div class="component">Bindings</div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">↓</div>
+            
+            <!-- libuv -->
+            <div class="layer libuv">
+                <div class="layer-title">libuv (Cross-platform C Library)</div>
+                <div class="components">
+                    <div class="component">Thread Pool<br><small>(4 worker threads)</small></div>
+                    <div class="component">Event Loop<br><small>(Main thread)</small></div>
+                    <div class="component">Async I/O</div>
+                    <div class="component">File Operations</div>
+                    <div class="component">Networking</div>
+                    <div class="component">Timers</div>
+                </div>
+                <div class="thread-pool-detail">
+                    <h4 style="color: #2ed573; margin: 15px 0 10px 0;">Thread Pool Operations:</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+                        <div style="background: white; padding: 8px; border-radius: 5px; text-align: center; font-size: 0.85em;">File System</div>
+                        <div style="background: white; padding: 8px; border-radius: 5px; text-align: center; font-size: 0.85em;">DNS Lookups</div>
+                        <div style="background: white; padding: 8px; border-radius: 5px; text-align: center; font-size: 0.85em;">CPU Tasks</div>
+                        <div style="background: white; padding: 8px; border-radius: 5px; text-align: center; font-size: 0.85em;">Crypto Operations</div>
+                        <div style="background: white; padding: 8px; border-radius: 5px; text-align: center; font-size: 0.85em;">Compression</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">↓</div>
+            
+            <!-- Operating System -->
+            <div class="layer os">
+                <div class="layer-title">Operating System</div>
+                <div class="components">
+                    <div class="component">File System</div>
+                    <div class="component">Network Stack</div>
+                    <div class="component">Process Management</div>
+                    <div class="component">Memory Management</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="description">
+            <h3>How Node.js Works - Single Thread + Multi-Threading:</h3>
+            
+            <div style="background: #fff3cd; padding: 15px; border-radius: 10px; border-left: 5px solid #ffc107; margin-bottom: 20px;">
+                <h4 style="color: #856404; margin-top: 0;">🧵 The Threading Reality:</h4>
+                <p style="color: #856404; margin-bottom: 0;"><strong>JavaScript runs on 1 thread, but Node.js uses multiple threads behind the scenes!</strong></p>
+            </div>
+            
+            <p><strong>1. Main Thread (Event Loop):</strong> All JavaScript code runs on a single thread. This includes your application logic, callbacks, and the event loop phases. This is why Node.js is called "single-threaded".</p>
+            
+            <p><strong>2. Thread Pool (libuv):</strong> Node.js automatically uses 4 worker threads (configurable via UV_THREADPOOL_SIZE) for:</p>
+            <ul style="margin-left: 20px; color: #34495e;">
+                <li><strong>File System operations:</strong> fs.readFile(), fs.writeFile()</li>
+                <li><strong>DNS lookups:</strong> dns.lookup()</li>
+                <li><strong>CPU-intensive tasks:</strong> crypto.pbkdf2(), zlib compression</li>
+                <li><strong>Some database operations</strong></li>
+            </ul>
+            
+            <p><strong>3. System Threads:</strong> The OS provides additional threads for:</p>
+            <ul style="margin-left: 20px; color: #34495e;">
+                <li><strong>Network I/O:</strong> HTTP requests, TCP connections (handled by OS, not thread pool)</li>
+                <li><strong>Timers and signals</strong></li>
+            </ul>
+            
+            <p><strong>4. Event Loop Phases Detailed:</strong></p>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                <strong>🔄 The event loop continuously cycles through 6 phases:</strong><br>
+                <strong>1. Timer:</strong> Executes setTimeout() and setInterval() callbacks<br>
+                <strong>2. Pending:</strong> Executes I/O callbacks deferred to next loop iteration<br>
+                <strong>3. Idle/Prepare:</strong> Internal use only<br>
+                <strong>4. Poll:</strong> Fetches new I/O events; executes I/O related callbacks<br>
+                <strong>5. Check:</strong> Executes setImmediate() callbacks<br>
+                <strong>6. Close:</strong> Executes close callbacks (e.g., socket.on('close'))<br>
+                <br>
+                <strong>🚀 Microtasks (process.nextTick, Promises):</strong> Execute between EVERY phase transition!
+            </div>
+            
+            <p><strong>5. Execution Order Example:</strong></p>
+            <div style="background: #fff3cd; padding: 15px; border-radius: 8px; font-family: monospace; margin: 10px 0; border-left: 5px solid #ffc107;">
+                console.log('1: start');<br>
+                setTimeout(() => console.log('2: timeout'), 0);<br>
+                setImmediate(() => console.log('3: immediate'));<br>
+                process.nextTick(() => console.log('4: nextTick'));<br>
+                Promise.resolve().then(() => console.log('5: promise'));<br>
+                console.log('6: end');<br><br>
+                
+                <strong style="color: #856404;">Output: 1 → 6 → 4 → 5 → 2 → 3</strong><br>
+                <small style="color: #856404;">Synchronous first, then microtasks, then macrotasks!</small>
+            </div>
+            
+            <p><strong>6. V8 Engine:</strong> Google's V8 JavaScript engine compiles JavaScript to native machine code for fast execution on the main thread.</p>
+            
+            <p><strong>7. The Magic Flow:</strong></p>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: monospace; margin: 10px 0;">
+                Your JS Code → Main Thread → Heavy Operation? → Worker Thread → Result → Callback → Main Thread
+            </div>
+            
+            <p><strong>8. Why This Works:</strong> While worker threads handle I/O, the main thread continues executing other JavaScript. When I/O completes, results are queued for the event loop to process. This prevents blocking and enables high concurrency.</p>
+            
+            <div style="background: #d4edda; padding: 15px; border-radius: 10px; border-left: 5px solid #28a745;">
+                <strong style="color: #155724;">💡 Key Insight:</strong> Node.js gives you the simplicity of single-threaded programming while secretly using multiple threads for performance!
+            </div>
+        </div>
+    </div>
+</body>
+</html>
