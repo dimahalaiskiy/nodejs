@@ -384,6 +384,24 @@
                     <div class="component">Memory Management</div>
                 </div>
             </div>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- UI Interaction Flow Layer -->
+            <div class="layer javascript">
+                <div class="layer-title">User Interface Interaction with Node.js</div>
+                <div class="components">
+                    <div class="component">User clicks button</div>
+                    <div class="component">Browser sends HTTP Request</div>
+                    <div class="component">Node.js API (Express/NestJS)</div>
+                    <div class="component">Business Logic + DB Query</div>
+                    <div class="component">Response (JSON/HTML)</div>
+                    <div class="component">UI updates (React/Vue/etc)</div>
+                </div>
+                <div style="margin-top: 20px; background: #f1f2f6; padding: 15px; border-radius: 10px; border-left: 5px solid #3498db;">
+                    <strong style="color: #2c3e50;">📌 Note:</strong> This UI-to-backend communication is typically asynchronous. Node.js leverages its event-driven, non-blocking nature to handle many UI requests efficiently via HTTP (REST) or WebSocket channels.
+                </div>
+            </div>
         </div>
         
         <div class="description">
